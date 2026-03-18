@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇瑞瑞虎加密项密码计算器</title>
+    <link rel="stylesheet" href="../../../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>:root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 10px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+        
+        h1 {
+            color: var(--secondary);
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        h1 i {
+            color: var(--primary);
+        }
+        
+        .current-time {
+            color: var(--primary);
+            display: flex;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .description {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        /* 选项卡样式 */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            border: 1px solid #e1e5e9;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .input-group {
+            margin: 25px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            transition: var(--transition);
+            outline: none;
+        }
+        
+        input[type="text"]:focus, input[type="date"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .paste-button {
+            position: absolute;
+            right: 8px;
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .paste-button:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--primary-dark);
+        }
+        
+        .paste-button:active {
+            transform: scale(0.9);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin: 25px 0;
+        }
+        
+        button {
+            flex: 1;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #dde4e6;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(10px);
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .result.show {
+            opacity: 1;
+            transform: translateY(0);
+            max-height: 300px;
+        }
+        
+        .result-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .password-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
+            word-break: break-all;
+        }
+        
+        .calculation-details {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .applicable-models {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f4fd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+        
+        .applicable-models strong {
+            color: var(--primary);
+        }
+        
+        .applicable-models-info {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+            color: #2c3e50;
+            transition: var(--transition);
+        }
+        
+        .applicable-models-info strong {
+            color: var(--primary);
+        }
+        
+        .error {
+            background-color: #ffeaea;
+            border-left-color: var(--accent);
+        }
+        
+        footer {
+            margin-top: 30px;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            border-top: 1px solid #e1e5e9;
+            width: 100%;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(52, 152, 219, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .card {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1><i class="fas fa-car"></i> 瑞虎车机加密项密码</h1>
+            <div class="current-time">
+                <span id="time">2026年03月16日 12:29:44</span>
+            </div>
+            <p class="description">奇瑞车机加密项 序列号/日期密码计算器</p>
+            
+            <!-- 选项卡导航 -->
+            <div class="tabs">
+                <button class="tab active" data-tab="tab1">序列号密码计算器</button>
+                <button class="tab" data-tab="tab2">日期密码计算器</button>
+            </div>
+            
+            <!-- 选项卡1内容：序列号密码计算器 -->
+            <div id="tab1" class="tab-content active">
+                <div class="input-group">
+                    <label for="serialInput">序列号后6位：</label>
+                    <div class="input-container">
+                        <input type="text" id="serialInput" maxlength="6" placeholder="请输入6位数字">
+                        <button class="paste-button" id="pasteButton" title="粘贴">
+                            <i class="fas fa-paste"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" id="calculateSerialBtn">
+                        <i class="fas fa-calculator"></i> 计算密码
+                    </button>
+                    <button class="btn-secondary" id="resetSerialBtn">
+                        <i class="fas fa-redo"></i> 清空重置
+                    </button>
+                </div>
+                
+                <!-- 适用车型信息 - 初始显示 -->
+                <div class="applicable-models-info" id="initialModelsInfo1">
+                    <strong>适用车型：</strong>艾瑞泽8、瑞虎9、等...
+                </div>
+                
+                <div class="loading" id="loadingIndicator1">
+                    <div class="loading-spinner"></div>
+                    <p>正在计算密码 ...</p>
+                </div>
+                
+                <div class="result" id="passwordResult1">
+                    <!-- 结果将在这里显示 -->
+                </div>
+                
+                <div class="button-group" id="resultActions1" style="display: none;">
+                    <button class="btn-success" id="copySerialBtn">
+                        <i class="fas fa-copy"></i> 复制密码
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 选项卡2内容：日期密码计算器 -->
+            <div id="tab2" class="tab-content">
+                <div class="input-group">
+                    <label for="dateInput">选择日期：</label>
+                    <input type="date" id="dateInput">
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" id="calculateDateBtn">
+                        <i class="fas fa-calculator"></i> 计算密码
+                    </button>
+                    <button class="btn-secondary" id="resetDateBtn">
+                        <i class="fas fa-redo"></i> 清空重置
+                    </button>
+                </div>
+                
+                <!-- 适用车型信息 - 初始显示 -->
+                <div class="applicable-models-info" id="initialModelsInfo2">
+                    <strong>适用车型：</strong>瑞虎8PRO、瑞虎9L、风云T9、等...
+                </div>
+                
+                <div class="loading" id="loadingIndicator2">
+                    <div class="loading-spinner"></div>
+                    <p>正在计算密码 ...</p>
+                </div>
+                
+                <div class="result" id="passwordResult2">
+                    <!-- 结果将在这里显示 -->
+                </div>
+                
+                <div class="button-group" id="resultActions2" style="display: none;">
+                    <button class="btn-success" id="copyDateBtn">
+                        <i class="fas fa-copy"></i> 复制密码
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        奇瑞车机加密项 | 序列号/日期 密码计算<br>
+        © 2025 阿辉车机助手 版权所有
+    </footer>
+
+    
+
+<script type="text/javascript">
+  document.write=function() {};
+  document.writeln=function() {};
+</script>
+
+<script>
+        // 更新时间显示
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('time').textContent = 
+                `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
+        }
+        
+        // 初始更新时间
+        updateTime();
+        // 每秒更新一次
+        setInterval(updateTime, 1000);
+    
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 设置默认日期为今天
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('dateInput').value = `${year}-${month}-${day}`;
+            
+            // 选项卡切换
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // 更新活动选项卡
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // 显示对应的内容
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // 序列号输入变化监听
+            const serialInput = document.getElementById('serialInput');
+            const resultDiv1 = document.getElementById('passwordResult1');
+            const resultActions1 = document.getElementById('resultActions1');
+            const initialModelsInfo1 = document.getElementById('initialModelsInfo1');
+            
+            serialInput.addEventListener('input', () => {
+                resultDiv1.classList.remove('show');
+                resultDiv1.className = 'result';
+                resultActions1.style.display = 'none';
+                initialModelsInfo1.style.display = 'block';
+            });
+            
+            // 日期输入变化监听
+            const dateInput = document.getElementById('dateInput');
+            const resultDiv2 = document.getElementById('passwordResult2');
+            const resultActions2 = document.getElementById('resultActions2');
+            const initialModelsInfo2 = document.getElementById('initialModelsInfo2');
+            
+            dateInput.addEventListener('input', () => {
+                resultDiv2.classList.remove('show');
+                resultDiv2.className = 'result';
+                resultActions2.style.display = 'none';
+                initialModelsInfo2.style.display = 'block';
+            });
+            
+            // 粘贴按钮事件
+            const pasteButton = document.getElementById('pasteButton');
+            pasteButton.addEventListener('click', pasteFromClipboard);
+            
+            // 按钮事件绑定
+            document.getElementById('calculateSerialBtn').addEventListener('click', calculateSerialPassword);
+            document.getElementById('resetSerialBtn').addEventListener('click', resetSerialCalculator);
+            document.getElementById('copySerialBtn').addEventListener('click', copySerialPassword);
+            
+            document.getElementById('calculateDateBtn').addEventListener('click', calculateDatePassword);
+            document.getElementById('resetDateBtn').addEventListener('click', resetDateCalculator);
+            document.getElementById('copyDateBtn').addEventListener('click', copyDatePassword);
+        });
+
+        // 从剪贴板粘贴内容
+        async function pasteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                // 只取数字部分，并限制为6位
+                const numbers = text.replace(/\D/g, '').slice(-6);
+                document.getElementById('serialInput').value = numbers;
+            } catch (err) {
+                console.error('无法访问剪贴板:', err);
+                // 备用方案：使用document.execCommand
+                const input = document.getElementById('serialInput');
+                input.focus();
+                document.execCommand('paste');
+                // 清理粘贴的内容，只保留数字
+                setTimeout(() => {
+                    const numbers = input.value.replace(/\D/g, '').slice(-6);
+                    input.value = numbers;
+                }, 100);
+            }
+        }
+
+        // 序列号密码计算器函数
+        function calculateSerialPassword() {
+            const serialInput = document.getElementById('serialInput');
+            const resultDiv = document.getElementById('passwordResult1');
+            const resultActions = document.getElementById('resultActions1');
+            const loadingIndicator = document.getElementById('loadingIndicator1');
+            const initialModelsInfo = document.getElementById('initialModelsInfo1');
+            
+            // 隐藏之前的结果和初始车型信息
+            resultDiv.classList.remove('show');
+            resultActions.style.display = 'none';
+            initialModelsInfo.style.display = 'none';
+            
+            const serialValue = serialInput.value.trim();
+            if (!serialValue) {
+                showError1('❌ 请输入车机序列号后6位');
+                return;
+            }
+            
+            // 验证输入是否为6位数字
+            if (!/^\d{6}$/.test(serialValue)) {
+                showError1('❌ 请输入有效的6位数字！');
+                return;
+            }
+
+            // 显示加载指示器
+            loadingIndicator.style.display = 'block';
+            
+            // 使用setTimeout模拟计算过程，让加载指示器可见
+            setTimeout(() => {
+                try {
+                    // 计算逻辑
+                    const serialBigInt = BigInt(serialValue);
+                    const multiplier = BigInt(802018);
+                    const product = serialBigInt * multiplier;
+
+                    // 转为字符串并取最后6位
+                    let resultStr = product.toString();
+                    let last6 = resultStr.slice(-6).padStart(6, '0'); // 不足6位补零
+                    
+                    // 构建结果HTML
+                    resultDiv.innerHTML = `
+                        <div class="result-title">密码结果：</div>
+                        <div class="password-value">${last6}</div>
+                        <div class="calculation-details">
+                            计算过程：${serialValue} × 802018 = ${product}<br>
+                            取最后6位：${last6}
+                        </div>
+                        <div class="applicable-models">
+                            <strong>适用车型：</strong>瑞虎9、等...
+                        </div>
+                    `;
+                    
+                    resultDiv.className = 'result show';
+                    resultActions.style.display = 'flex';
+                } catch (err) {
+                    showError1(`❌ 计算错误：${err.message}`);
+                } finally {
+                    // 隐藏加载指示器
+                    loadingIndicator.style.display = 'none';
+                }
+            }, 800);
+        }
+        
+        function showError1(message) {
+            const resultDiv = document.getElementById('passwordResult1');
+            const resultActions = document.getElementById('resultActions1');
+            const loadingIndicator = document.getElementById('loadingIndicator1');
+            const initialModelsInfo = document.getElementById('initialModelsInfo1');
+            
+            resultDiv.innerHTML = `<div class="password-value">${message}</div>`;
+            resultDiv.className = 'result error show';
+            resultActions.style.display = 'none';
+            loadingIndicator.style.display = 'none';
+            initialModelsInfo.style.display = 'none';
+        }
+        
+        function resetSerialCalculator() {
+            document.getElementById('serialInput').value = '';
+            
+            const resultDiv = document.getElementById('passwordResult1');
+            const resultActions = document.getElementById('resultActions1');
+            const initialModelsInfo = document.getElementById('initialModelsInfo1');
+            
+            resultDiv.classList.remove('show');
+            resultDiv.className = 'result';
+            resultActions.style.display = 'none';
+            initialModelsInfo.style.display = 'block';
+        }
+
+        function copySerialPassword() {
+            const resultDiv = document.getElementById('passwordResult1');
+            const text = resultDiv.textContent;
+            const match = text.match(/取最后6位：(\d{6})/);
+            if (match) {
+                const password = match[1];
+                copyToClipboard(password, 'copySerialBtn');
+            } else {
+                alert("未能识别密码");
+            }
+        }
+
+        // 日期密码计算器函数
+        const TAIL_NUMBER_MAP = {
+            '0': '213518',
+            '1': '658035',
+            '2': '235657',
+            '3': '567534',
+            '4': '647825',
+            '5': '234700',
+            '6': '127347',
+            '7': '648924',
+            '8': '733782',
+            '9': '553456'
+        };
+
+        function formatDateToYYMMDD(date) {
+            const year = String(date.getFullYear()).slice(-2);
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}${month}${day}`;
+        }
+
+        function calculateDatePassword() {
+            const dateInput = document.getElementById('dateInput');
+            const resultDiv = document.getElementById('passwordResult2');
+            const resultActions = document.getElementById('resultActions2');
+            const loadingIndicator = document.getElementById('loadingIndicator2');
+            const initialModelsInfo = document.getElementById('initialModelsInfo2');
+            
+            // 隐藏之前的结果和初始车型信息
+            resultDiv.classList.remove('show');
+            resultActions.style.display = 'none';
+            initialModelsInfo.style.display = 'none';
+            
+            const selectedValue = dateInput.value;
+            if (!selectedValue) {
+                showError2('❌ 请选择一个日期');
+                return;
+            }
+
+            const targetDate = new Date(selectedValue);
+            if (isNaN(targetDate.getTime())) {
+                showError2('❌ 日期无效');
+                return;
+            }
+
+            // 显示加载指示器
+            loadingIndicator.style.display = 'block';
+            
+            // 使用setTimeout模拟计算过程，让加载指示器可见
+            setTimeout(() => {
+                try {
+                    const dateString = formatDateToYYMMDD(targetDate);
+                    const tail = dateString.slice(-1);
+                    const suffix = TAIL_NUMBER_MAP[tail];
+                    
+                    if (suffix === undefined) {
+                        throw new Error(`尾数 ${tail} 无对应映射`);
+                    }
+                    
+                    const sum = (BigInt(dateString) + BigInt(suffix)).toString();
+                    
+                    // 构建结果HTML
+                    resultDiv.innerHTML = `
+                        <div class="result-title">密码结果：</div>
+                        <div class="password-value">${sum}</div>
+                        <div class="calculation-details">
+                            计算过程：${dateString} + ${suffix} = ${sum}
+                        </div>
+                        <div class="applicable-models">
+                            <strong>适用车型：</strong>瑞虎8PRO、瑞虎9L、风云T9、等...
+                        </div>
+                    `;
+                    
+                    resultDiv.className = 'result show';
+                    resultActions.style.display = 'flex';
+                } catch (err) {
+                    showError2(`❌ 计算错误：${err.message}`);
+                } finally {
+                    // 隐藏加载指示器
+                    loadingIndicator.style.display = 'none';
+                }
+            }, 800);
+        }
+        
+        function showError2(message) {
+            const resultDiv = document.getElementById('passwordResult2');
+            const resultActions = document.getElementById('resultActions2');
+            const loadingIndicator = document.getElementById('loadingIndicator2');
+            const initialModelsInfo = document.getElementById('initialModelsInfo2');
+            
+            resultDiv.innerHTML = `<div class="password-value">${message}</div>`;
+            resultDiv.className = 'result error show';
+            resultActions.style.display = 'none';
+            loadingIndicator.style.display = 'none';
+            initialModelsInfo.style.display = 'none';
+        }
+        
+        function resetDateCalculator() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('dateInput').value = `${year}-${month}-${day}`;
+            
+            const resultDiv = document.getElementById('passwordResult2');
+            const resultActions = document.getElementById('resultActions2');
+            const initialModelsInfo = document.getElementById('initialModelsInfo2');
+            
+            resultDiv.classList.remove('show');
+            resultDiv.className = 'result';
+            resultActions.style.display = 'none';
+            initialModelsInfo.style.display = 'block';
+        }
+
+        function copyDatePassword() {
+            const resultDiv = document.getElementById('passwordResult2');
+            const text = resultDiv.textContent;
+            const match = text.match(/计算过程：\d+ \+ \d+ = (\d+)/);
+            if (match) {
+                const password = match[1];
+                copyToClipboard(password, 'copyDateBtn');
+            } else {
+                alert("未能识别密码");
+            }
+        }
+
+        // 通用复制功能
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'absolute';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        function copyToClipboard(text, buttonId) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopySuccess(buttonId);
+                }).catch(() => {
+                    fallbackCopy(text);
+                    showCopySuccess(buttonId);
+                });
+            } else {
+                fallbackCopy(text);
+                showCopySuccess(buttonId);
+            }
+        }
+        
+        function showCopySuccess(buttonId) {
+            const copyButton = document.getElementById(buttonId);
+            const originalText = copyButton.innerHTML;
+            
+            copyButton.innerHTML = '<i class="fas fa-check"></i> 已复制';
+            copyButton.style.backgroundColor = '#27ae60';
+            
+            setTimeout(() => {
+                copyButton.innerHTML = originalText;
+                copyButton.style.backgroundColor = '';
+            }, 2000);
+        }
+    </script>
+
+</body></html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星途揽月密码生成器</title>
+    <link rel="stylesheet" href="../../../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>:root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 10px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--secondary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+        
+        h1 {
+            color: var(--secondary);
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        h1 i {
+            color: var(--primary);
+        }
+
+        .auto-time {
+            color: var(--primary);
+            display: flex;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .date-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 15px;
+        }
+
+        .date-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .date-input label {
+            margin-right: 8px;
+        }
+
+        .date-input input {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            flex: 1;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .button-row .btn {
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        
+        .password-box {
+            margin: 18px 0;
+            padding: 12px;
+            background: #fafafa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .password-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 6px;
+        }
+        
+        .password-display {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--accent);
+            letter-spacing: 3px;
+            font-family: monospace;
+            text-align: center;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .info {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 12px;
+        }
+        
+        footer {
+            margin-top: 30px;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            border-top: 1px solid #e1e5e9;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1><i class="fas fa-car"></i> 星途揽月密码生成器</h1>
+            
+            <div class="auto-time">
+                <span id="currentTime">2026年03月16日 12:29:44</span>
+            </div>
+            
+            <div class="date-input">
+                <label for="selectDate" class="date-label">选择日期：</label>
+                <input type="date" id="selectDate">
+            </div>
+
+            <div class="button-row">
+                <button class="btn" onclick="resetToToday()">
+                    <i class="fas fa-redo"></i> 刷新重置
+                </button>
+                <button class="btn" onclick="calculatePassword()" disabled=""><i class="fas fa-spinner fa-spin"></i> 生成中...</button>
+            </div>
+            
+            <div class="password-box">
+                <div class="password-label">今日密码：</div>
+                <div class="password-display" id="passwordDisplay" style="font-size: 16px; color: var(--primary); font-family: inherit; letter-spacing: normal; justify-content: center;"><i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>正在生成密码...</div>
+                <div class="info" id="lastUpdate">最后更新日期：--</div>
+            </div>
+            
+            <div style="margin-top: 12px;">
+                <button class="btn" id="copyBtn" onclick="copyPassword()" style="background: var(--success); width: 100%;">
+                    <i class="fas fa-copy"></i> 复制密码
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        选择任意日期生成对应密码<br>
+        © <span id="currentYear">2026</span> 阿辉车机助手 版权所有
+    </footer>
+
+    
+
+<script type="text/javascript">
+  document.write=function() {};
+  document.writeln=function() {};
+</script>
+
+<script>
+        function updateCurrentTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = 
+                `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
+        }
+
+        async function generatePassword(year, month, day) {
+            const dateStr = `${year}${String(month).padStart(2, '0')}${String(day).padStart(2, '0')}`;
+            const combined = dateStr + "I99ea147442e053911fa21280f578bb83e2d0d289";
+            
+            const encoder = new TextEncoder();
+            const data = encoder.encode(combined);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            const sha256Str = Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+            
+            const digits = sha256Str.split('').filter(c => !isNaN(c)).join('').substring(0, 6);
+            return digits.padEnd(6, '0').substring(0, 6);
+        }
+        
+        function updateLastUpdateTime(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            document.getElementById('lastUpdate').textContent = `最后更新日期：${y}-${m}-${d}`;
+        }
+
+        async function calculatePassword() {
+            const input = document.getElementById('selectDate').value;
+            if (!input) {
+                alert('请选择一个日期！');
+                return;
+            }
+            const selectedDate = new Date(input);
+            if (isNaN(selectedDate.getTime())) {
+                alert('无效的日期格式！');
+                return;
+            }
+
+            const btn = document.querySelector('.button-row .btn:nth-child(2)');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成中...';
+            btn.disabled = true;
+
+            const display = document.getElementById('passwordDisplay');
+            display.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>正在生成密码...';
+            display.style.cssText = 'font-size: 16px; color: var(--primary); font-family: inherit; letter-spacing: normal; justify-content: center;';
+
+            document.getElementById('lastUpdate').textContent = '最后更新日期：--';
+
+            try {
+                const pwd = await generatePassword(
+                    selectedDate.getFullYear(),
+                    selectedDate.getMonth() + 1,
+                    selectedDate.getDate()
+                );
+                setTimeout(() => {
+                    display.textContent = pwd;
+                    display.style.cssText = 'font-size: 28px; font-weight: bold; color: var(--accent); letter-spacing: 3px; font-family: monospace; justify-content: center;';
+                    updateLastUpdateTime(selectedDate);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 1000);
+            } catch (err) {
+                console.error('密码生成失败:', err);
+                setTimeout(() => {
+                    display.textContent = '错误';
+                    display.style.cssText = 'font-size: 28px; font-weight: bold; color: var(--accent); letter-spacing: 3px; font-family: monospace; justify-content: center;';
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 1000);
+            }
+        }
+
+        async function copyPassword() {
+            const pwd = document.getElementById('passwordDisplay').textContent.trim();
+            if (['------', '错误'].includes(pwd) || pwd.includes('正在生成')) {
+                alert('请先生成有效的密码！');
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(pwd);
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                btn.disabled = true;
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 1500);
+            } catch (err) {
+                alert('复制失败，请手动复制。');
+            }
+        }
+        
+        function resetToToday() {
+            const btn = document.querySelector('.button-row .btn:nth-child(1)');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 刷新中...';
+            btn.disabled = true;
+            const now = new Date();
+            document.getElementById('selectDate').value = now.toISOString().slice(0, 10);
+            calculatePassword();
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('selectDate');
+            dateInput.addEventListener('change', () => {
+                document.getElementById('passwordDisplay').textContent = '------';
+                document.getElementById('lastUpdate').textContent = '最后更新日期：--';
+            });
+
+            const now = new Date();
+            dateInput.value = now.toISOString().slice(0, 10);
+            document.getElementById('currentYear').textContent = now.getFullYear();
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            calculatePassword();
+        });
+    </script>
+
+</body></html>

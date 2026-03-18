@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>奇瑞捷途工程模式ADB密码</title>
+  <link rel="stylesheet" href="../../../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>:root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+    body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 10px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    
+    .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            transition: var(--transition);
+        }
+    .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+    h1 {
+            color: var(--secondary);
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        h1 i {
+            color: var(--primary);
+        }
+    .mode-toggle {
+      margin: 12px 0;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-evenly;
+    }
+    .time-input input {
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #2980b9;
+    }
+    .input-with-button {
+      display: flex;
+      gap: 8px;
+    }
+    .input-with-button input {
+      flex: 1;
+      min-width: 0;
+    }
+    .calculate-btn {
+      padding: 8px 12px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .password-box {
+      margin: 18px 0;
+      padding: 12px;
+      background: #fafafa;
+      border-radius: 8px;
+      border-left: 4px solid #3498db;
+    }
+    .password-label {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 6px;
+    }
+    .password {
+      font-size: 28px;
+      font-weight: bold;
+      color: #e74c3c;
+      letter-spacing: 3px;
+      font-family: monospace;
+      word-break: keep-all;
+    }
+    .info {
+      font-size: 12px;
+      color: #95a5a6;
+      margin-top: 12px;
+    }
+    .auto-time {
+      color: var(--primary);
+            display: flex;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+    }
+
+    /* 规则切换按钮组 */
+    .tabs {
+      display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            border: 1px solid #e1e5e9;
+    }
+    .rule-btn {
+      flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            color: var(--dark);
+    }
+    .rule-btn.active {
+      background-color: var(--primary);
+            color: white;
+    }
+    
+    footer {
+            margin-top: 30px;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            border-top: 1px solid #e1e5e9;
+            width: 100%;
+        }
+    
+    @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    @media (max-width: 480px) {
+            .card {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+  </style>
+</head>
+<body>
+  <div class="container">
+      <div class="card">
+        <h1><i class="fas fa-car"></i>捷途工程模式ADB密码</h1>
+
+    <!-- 密码规则切换按钮 -->
+
+      <div class="tabs">
+        <button class="rule-btn active" data-rule="20250110" title="250110">旅行者/山海T2</button>
+        <button class="rule-btn" data-rule="20240910" title="240910">自由者</button>
+      </div>
+
+
+        <div class="auto-time">
+            <span id="currentTime" style="display: inline-block;">加载中...</span>
+        </div>
+    
+    
+    
+
+
+    <div id="manualSection" style="display:none;">
+      <div class="time-input">
+        <div class="input-with-button">
+            <input type="datetime-local" id="selectTime" step="3600">
+            <button class="btn calculate-btn" onclick="calculateManual()">计算密码</button>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="mode-toggle">
+        <label>
+            <input type="radio" name="mode" value="auto" checked=""> 自动模式（整点更新）
+        </label>
+        <label>
+            <input type="radio" name="mode" value="manual"> 手动选择（年月日时）
+        </label>
+    </div>
+    
+
+    <!-- 合并后的密码显示区域 -->
+<div class="password-box">
+  <div class="dual-password" style="text-align: left; margin-top: 12px; line-height: 1.6;">
+    <div>
+      <span class="password-label">1. 工程模式密码：（蓝牙电话输入）</span><br>
+      <span class="password" id="engineeringPassword">*#------#*</span>
+    </div>
+    <div style="margin-top: 14px;">
+      <span class="password-label">2. ADB模式密码：（加密设置输入）</span><br>
+      <span class="password" id="adbPassword">------</span>
+    </div>
+    <div class="info" id="lastUpdate" style="font-size:12px; color:#7f8c8d; margin-top:8px;">最后更新时间：--</div>
+  </div>
+</div>
+    
+    <div style="margin-top: 12px;">
+      <button class="btn" onclick="copyPasswords()" style="background: #2ecc71; font-size:16px; padding:8px 16px; width: 100%;">
+        <i class="fas fa-copy"></i> 复制当前密码
+      </button>
+    </div>
+
+    <div class="info" style="margin: 12px 0; padding: 10px; background-color: #f9f9f9; border-radius: 6px; font-size: 13px; color: #555;">
+      <marquee>已知适用车型：23-24款旅行者以及加长版、24款山海T2、捷途自由者、等...</marquee>
+    </div>
+    
+    
+  </div>
+  </div>
+
+    <footer>
+        自动模式：整点自动更新 | 手动模式：所选时间更新<br>
+        © 2025 阿辉车机助手 版权所有
+    </footer>
+
+  
+
+<script type="text/javascript">
+  document.write=function() {};
+  document.writeln=function() {};
+</script>
+
+<script>
+    let autoUpdateInterval = null;
+    let currentRule = "20250110"; // 默认规则
+
+    function pad(num, size) {
+      return String(num).padStart(size, '0');
+    }
+
+    function getSelectedRule() {
+      return BigInt(currentRule);
+    }
+
+    function updateLastUpdateTime(date) {
+      const year = date.getFullYear();
+      const month = pad(date.getMonth() + 1, 2);
+      const day = pad(date.getDate(), 2);
+      const hours = pad(date.getHours(), 2);
+      const minutes = pad(date.getMinutes(), 2);
+      document.getElementById('lastUpdate').textContent = 
+        `最后更新时间：${year}-${month}-${day} ${hours}:${minutes}`;
+    }
+
+    function calculateBaseResult(date) {
+      const constNum = getSelectedRule();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hour = date.getHours();
+      const timeStr = pad(month, 2) + pad(day, 2) + pad(hour, 2);
+      return constNum * BigInt(timeStr);
+    }
+
+    function getLast6(numBigInt) {
+      return numBigInt.toString().slice(-6).padStart(6, '0');
+    }
+
+    function updatePasswordsByDate(date) {
+      const baseResult = calculateBaseResult(date);
+      const adbPassword = getLast6(baseResult);
+      const engineeringRaw = baseResult - BigInt(date.getHours());
+      const engineeringCode = getLast6(engineeringRaw);
+      const engineeringPassword = `*#${engineeringCode}#*`;
+
+      document.getElementById('engineeringPassword').textContent = engineeringPassword;
+      document.getElementById('adbPassword').textContent = adbPassword;
+      updateLastUpdateTime(date);
+    }
+
+    function updateAutoMode() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = pad(now.getMonth() + 1, 2);
+      const day = pad(now.getDate(), 2);
+      const hours = pad(now.getHours(), 2);
+      const minutes = pad(now.getMinutes(), 2);
+      const seconds = pad(now.getSeconds(), 2);
+      const timeString = `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
+      document.getElementById('currentTime').textContent = timeString;
+      updatePasswordsByDate(now);
+    }
+
+    function toggleMode() {
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  const manualSection = document.getElementById('manualSection');
+  const currentTimeEl = document.getElementById('currentTime');
+
+  if (mode === 'auto') {
+    manualSection.style.display = 'none';
+    currentTimeEl.style.display = 'inline-block';
+    resetPasswords();
+    setTimeout(() => {
+      updateAutoMode();
+      autoUpdateInterval = setInterval(updateAutoMode, 1000);
+    }, 1000);
+  } else {
+    clearInterval(autoUpdateInterval);
+    currentTimeEl.style.display = 'none';
+    manualSection.style.display = 'block';
+
+    const now = new Date();
+    now.setMinutes(0, 0, 0);
+    document.getElementById('selectTime').value = now.toISOString().slice(0, 16);
+    resetPasswords();
+  }
+}
+
+// 初始化
+window.onload = function () {
+  // 监听两个 radio 按钮的变化
+  const modeRadios = document.querySelectorAll('input[name="mode"]');
+  modeRadios.forEach(radio => {
+    radio.addEventListener('change', toggleMode);
+  });
+
+  setupRuleButtons();
+  toggleMode(); // 触发初始状态
+};
+
+    function resetPasswords() {
+      document.getElementById('engineeringPassword').textContent = '*#------#*';
+      document.getElementById('adbPassword').textContent = '------';
+      document.getElementById('lastUpdate').textContent = '最后更新时间：--';
+    }
+
+    function calculateManual() {
+      const input = document.getElementById('selectTime').value;
+      if (!input) {
+        alert('请选择一个时间！');
+        return;
+      }
+      const selectedDate = new Date(input);
+      if (isNaN(selectedDate.getTime())) {
+        alert('无效的时间格式！');
+        return;
+      }
+      updatePasswordsByDate(selectedDate);
+    }
+
+    async function copyPasswords() {
+      const engPass = document.getElementById('engineeringPassword').textContent;
+      const adbPass = document.getElementById('adbPassword').textContent;
+
+      if (engPass === '*#------#*' || adbPass === '------') {
+        alert('请先点击“计算密码”生成密码！');
+        return;
+      }
+
+      const textToCopy = `工程模式密码：${engPass}\nADB权限密码：${adbPass}`;
+
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        alert('密码已复制到剪贴板！');
+      } catch (err) {
+        console.error('复制失败:', err);
+        alert('复制失败，请手动复制。');
+      }
+    }
+
+    // 规则按钮点击处理
+    function setupRuleButtons() {
+      const buttons = document.querySelectorAll('.rule-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // 更新 active 状态
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          // 更新当前规则
+          currentRule = btn.dataset.rule;
+          
+          // 触发密码更新
+          const autoMode = document.getElementById('autoMode').checked;
+          if (autoMode) {
+            updateAutoMode();
+          } else {
+            const input = document.getElementById('selectTime').value;
+            if (input) {
+              const selectedDate = new Date(input);
+              if (!isNaN(selectedDate.getTime())) {
+                updatePasswordsByDate(selectedDate);
+              }
+            }
+          }
+        });
+      });
+    }
+  </script>
+
+</body></html>
